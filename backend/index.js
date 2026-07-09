@@ -26,26 +26,30 @@ app.use(errorHandler);
 // });
 
 async function startServer() {
-    try {
-        const connection = await db.getConnection();
-        // console.log('Db connected');
-        connection.release();
-console.log('Db connected')
+  try {
+    const connection = await db.getConnection();
+    connection.release();
+    console.log("Db connected");
 
-        app.listen(3888, err => {
-            if (err) {
-                throw err;
-            }
-            console.log('Server is running on port http://localhost:3888');
-        });
-    } catch (error) {
-        console.error('Error starting server:', error.message);
-    }
+    const PORT = process.env.PORT || 3888;
+
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("=== SERVER START FAILED ===");
+    console.error("Message:", error && error.message);
+    console.error("Code:", error && error.code);
+    console.error("Stack:", error && error.stack);
+    console.error(
+      "Full error object:",
+      JSON.stringify(error, Object.getOwnPropertyNames(error || {})),
+    );
+    process.exit(1);
+  }
 }
 
 startServer();
-
-
 
 
 
